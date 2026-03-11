@@ -59,7 +59,7 @@ SUBJECT_KEYWORDS = {
     "Mathematics & Statistics": ["math", "maths", "algebra", "calculus", "stats", "statistics", "numbers", "equations"],
     "Web Development (HTML/CSS/JS)": ["html", "css", "javascript", "web", "website", "frontend", "js", "design"],
     "Biology & Chemistry": ["biology", "bio", "chemistry", "chem", "science", "cells", "organic", "lab"],
-    "English & Essay Writing": ["english", "essay", "writing", "grammar", "literature", "lit", "reading", "words"],
+    "English & Essay Writing": ["english", "essay", "writing", "grammar", "literature", "lit", "reading", "words","text"],
 }
 
 def ai_suggest_subject(question):
