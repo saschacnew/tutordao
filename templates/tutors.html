@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Find Tutors — TutorDAO{% endblock %}
+{% block extra_styles %}
+.page-header { padding: 48px 0 32px; }
+.page-header h1 { font-family: 'Syne', sans-serif; font-size: 40px; font-weight: 800; margin-bottom: 8px; }
+.filter-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 36px; padding: 20px 24px; background: #fff; border: 1px solid var(--border); border-radius: 12px; }
+.filter-btn { padding: 8px 18px; border-radius: 20px; border: 1px solid var(--border); background: var(--bg); font-size: 13px; cursor: pointer; text-decoration: none; color: var(--dark); transition: all 0.15s; }
+.filter-btn:hover, .filter-btn.active { background: var(--dark); color: #fff; border-color: var(--dark); }
+.tutor-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+.tutor-card { background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 24px; text-decoration: none; color: inherit; display: block; transition: transform 0.2s, box-shadow 0.2s; }
+.tutor-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.08); }
+.tutor-avatar { width: 52px; height: 52px; border-radius: 50%; background: var(--dark); color: #fff; display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 20px; margin-bottom: 14px; }
+.tutor-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 17px; margin-bottom: 4px; }
+.tutor-bio { font-size: 13px; line-height: 1.6; color: #555; margin: 10px 0 16px; }
+.tutor-footer { display: flex; justify-content: space-between; align-items: center; }
+.tutor-rate { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 18px; }
+{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="page-header">
+    <h1>Find a Tutor</h1>
+    <p style="color:var(--muted);font-size:16px;">{{ tutors|length }} tutors available right now</p>
+  </div>
+  <div class="filter-bar">
+    <a href="/tutors" class="filter-btn {% if not selected %}active{% endif %}">All Subjects</a>
+    {% for subject in subjects %}
+    <a href="/tutors?subject={{ subject.split('(')[0].strip() }}" class="filter-btn {% if selected in subject %}active{% endif %}">{{ subject.split('(')[0].strip() }}</a>
+    {% endfor %}
+  </div>
+  {% if tutors %}
+  <div class="tutor-grid">
+    {% for tutor in tutors %}
+    <a href="/tutor/{{ tutor.id }}" class="tutor-card">
+      <div class="tutor-avatar">{{ tutor.name[0] }}</div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:6px;">
+        <div class="tutor-name">{{ tutor.name }}</div>
+        {% if tutor.verified %}<span class="badge badge-verified">✓ Verified</span>{% endif %}
+      </div>
+      <span class="badge badge-subject">{{ tutor.subject }}</span>
+      <div class="tutor-bio">{{ tutor.bio[:100] }}{% if tutor.bio|length > 100 %}...{% endif %}</div>
+      <div class="tutor-footer">
+        <div class="tutor-rate">${{ "%.0f"|format(tutor.hourly_rate) }}<span style="font-size:12px;font-weight:400;color:var(--muted);">/hr</span></div>
+        <div><span class="stars">★</span> <strong>{{ tutor.rating }}</strong> <span style="font-size:12px;color:var(--muted);">({{ tutor.total_sessions }})</span></div>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div style="text-align:center;padding:80px 0;color:var(--muted);">
+    <div style="font-size:48px;margin-bottom:16px;">🔍</div>
+    <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:700;margin-bottom:8px;">No tutors found</div>
+    <div>Try a different subject filter</div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

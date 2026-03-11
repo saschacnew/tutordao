@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% block title %}TutorDAO — Find Your Perfect Tutor{% endblock %}
+{% block extra_styles %}
+.hero { background: var(--dark); color: #fff; padding: 80px 0 100px; }
+.hero h1 { font-family: 'Syne', sans-serif; font-size: clamp(36px, 6vw, 72px); font-weight: 800; line-height: 1.05; margin-bottom: 20px; }
+.hero h1 span { color: var(--accent); }
+.hero p { font-size: 18px; color: #aaa; max-width: 500px; margin-bottom: 36px; line-height: 1.6; }
+.hero-btns { display: flex; gap: 12px; flex-wrap: wrap; }
+.ai-box { background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 16px; padding: 28px; margin-top: 48px; max-width: 600px; }
+.ai-box label { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: #666; display: block; margin-bottom: 10px; }
+.ai-input-row { display: flex; gap: 10px; }
+.ai-input { flex: 1; background: #111; border: 1px solid #333; border-radius: 8px; padding: 12px 16px; color: #fff; font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; }
+.ai-input:focus { border-color: var(--accent); }
+.ai-result { margin-top: 16px; font-size: 14px; color: #888; min-height: 20px; }
+.ai-result strong { color: var(--accent); }
+.ai-tutor-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.ai-chip { background: #222; border: 1px solid #333; border-radius: 8px; padding: 8px 14px; font-size: 13px; color: #ccc; text-decoration: none; transition: all 0.2s; }
+.ai-chip:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+.stats-bar { background: var(--accent); padding: 20px 0; }
+.stats-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; display: flex; gap: 48px; justify-content: center; }
+.stat-num { font-family: 'Syne', sans-serif; font-size: 32px; font-weight: 800; color: #fff; }
+.stat-label { font-size: 12px; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 1px; }
+.section { padding: 64px 0; }
+.section-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 36px; }
+.section-title { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 700; }
+.tutor-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+.tutor-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; text-decoration: none; color: inherit; display: block; transition: transform 0.2s, box-shadow 0.2s; }
+.tutor-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.08); }
+.tutor-avatar { width: 52px; height: 52px; border-radius: 50%; background: var(--dark); color: #fff; display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 20px; margin-bottom: 14px; }
+.tutor-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 17px; margin-bottom: 4px; }
+.tutor-bio { font-size: 13px; line-height: 1.6; color: #555; margin-bottom: 16px; }
+.tutor-footer { display: flex; justify-content: space-between; align-items: center; }
+.tutor-rate { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 18px; }
+.how-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.how-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 28px; }
+.how-num { font-family: 'Syne', sans-serif; font-size: 48px; font-weight: 800; color: var(--accent); opacity: 0.3; line-height: 1; margin-bottom: 12px; }
+.how-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 17px; margin-bottom: 8px; }
+.how-text { font-size: 14px; color: var(--muted); line-height: 1.6; }
+{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="container">
+    <h1>Find a tutor<br>who <span>gets it.</span></h1>
+    <p>Book verified peer tutors at your school. Better than YouTube, cheaper than Chegg.</p>
+    <div class="hero-btns">
+      <a href="/tutors" class="btn btn-primary">Browse Tutors →</a>
+      <a href="/register-tutor" class="btn btn-outline" style="color:#fff;border-color:#444;">Become a Tutor</a>
+    </div>
+    <div class="ai-box">
+      <label>🤖 AI Subject Matcher — tell me what you're struggling with</label>
+      <div class="ai-input-row">
+        <input class="ai-input" id="ai-q" placeholder="e.g. I don't understand Python loops..."/>
+        <button class="btn btn-primary" onclick="aiMatch()">Match Me</button>
+      </div>
+      <div class="ai-result" id="ai-result"></div>
+      <div class="ai-tutor-chips" id="ai-chips"></div>
+    </div>
+  </div>
+</section>
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat"><div class="stat-num">{{ stats.tutors }}</div><div class="stat-label">Tutors</div></div>
+    <div class="stat"><div class="stat-num">{{ stats.bookings }}</div><div class="stat-label">Sessions Booked</div></div>
+    <div class="stat"><div class="stat-num">{{ stats.subjects }}</div><div class="stat-label">Subjects</div></div>
+  </div>
+</div>
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-title">Top Tutors</div>
+      <a href="/tutors" style="font-size:14px;color:var(--accent);text-decoration:none;">See all →</a>
+    </div>
+    <div class="tutor-grid">
+      {% for tutor in tutors[:6] %}
+      <a href="/tutor/{{ tutor.id }}" class="tutor-card">
+        <div class="tutor-avatar">{{ tutor.name[0] }}</div>
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:6px;flex-wrap:wrap;">
+          <div class="tutor-name">{{ tutor.name }}</div>
+          {% if tutor.verified %}<span class="badge badge-verified">✓ Verified</span>{% endif %}
+        </div>
+        <span class="badge badge-subject">{{ tutor.subject }}</span>
+        <div class="tutor-bio" style="margin-top:10px;">{{ tutor.bio[:90] }}{% if tutor.bio|length > 90 %}...{% endif %}</div>
+        <div class="tutor-footer">
+          <div class="tutor-rate">${{ "%.0f"|format(tutor.hourly_rate) }}<span style="font-size:12px;font-weight:400;color:var(--muted);">/hr</span></div>
+          <div><span class="stars">★</span> <strong>{{ tutor.rating }}</strong> <span style="font-size:12px;color:var(--muted);">({{ tutor.total_sessions }})</span></div>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+<section class="section" style="background:#fff;">
+  <div class="container">
+    <div class="section-title" style="margin-bottom:36px;">How it works</div>
+    <div class="how-grid">
+      <div class="how-card"><div class="how-num">01</div><div class="how-title">Find your tutor</div><div class="how-text">Browse by subject or use our AI matcher.</div></div>
+      <div class="how-card"><div class="how-num">02</div><div class="how-title">Book a session</div><div class="how-text">Pick a date and time. Done in 60 seconds.</div></div>
+      <div class="how-card"><div class="how-num">03</div><div class="how-title">Learn & rate</div><div class="how-text">Meet your tutor. Rate the session after.</div></div>
+    </div>
+  </div>
+</section>
+<script>
+async function aiMatch() {
+  const q = document.getElementById('ai-q').value.trim();
+  if (!q) return;
+  const res = document.getElementById('ai-result');
+  const chips = document.getElementById('ai-chips');
+  res.innerHTML = 'Thinking...';
+  chips.innerHTML = '';
+  try {
+    const r = await fetch('/ai-match', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({question: q}) });
+    const data = await r.json();
+    if (data.subject) {
+      res.innerHTML = `Looks like you need help with <strong>${data.subject}</strong>. Best matches:`;
+      data.tutors.forEach(t => { chips.innerHTML += `<a href="/tutor/${t.id}" class="ai-chip">⭐ ${t.name} — $${t.hourly_rate}/hr</a>`; });
+    } else {
+      res.innerHTML = 'Try <a href="/tutors" style="color:var(--accent)">browsing all tutors</a>.';
+    }
+  } catch(e) { res.innerHTML = 'Something went wrong.'; }
+}
+document.getElementById('ai-q').addEventListener('keypress', e => { if(e.key==='Enter') aiMatch(); });
+</script>
+{% endblock %}

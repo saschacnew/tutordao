@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{% block title %}TutorDAO{% endblock %}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f7f5f0; --dark: #0f0e0c; --accent: #ff5c35;
+      --card: #ffffff; --border: #e8e4dc; --muted: #888;
+    }
+    body { background: var(--bg); color: var(--dark); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
+    nav { background: var(--dark); padding: 0 40px; display: flex; justify-content: space-between; align-items: center; height: 64px; position: sticky; top: 0; z-index: 100; }
+    .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 22px; color: #fff; text-decoration: none; }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 8px; align-items: center; }
+    .nav-links a { color: #aaa; text-decoration: none; font-size: 14px; padding: 8px 14px; border-radius: 6px; transition: color 0.2s, background 0.2s; }
+    .nav-links a:hover { color: #fff; background: #1e1e1e; }
+    .nav-links .btn-nav { background: var(--accent); color: #fff !important; font-weight: 500; }
+    .nav-links .btn-nav:hover { background: #e04a27; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+    .btn { display: inline-block; padding: 12px 28px; border-radius: 8px; font-family: 'Syne', sans-serif; font-weight: 600; font-size: 14px; cursor: pointer; border: none; text-decoration: none; transition: all 0.2s; }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: #e04a27; transform: translateY(-1px); }
+    .btn-secondary { background: var(--dark); color: #fff; }
+    .btn-outline { background: transparent; border: 2px solid var(--dark); color: var(--dark); }
+    .btn-outline:hover { background: var(--dark); color: #fff; }
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; }
+    .badge-verified { background: #e8f5e9; color: #2e7d32; }
+    .badge-subject { background: #fff3e0; color: #e65100; }
+    .stars { color: var(--accent); font-size: 13px; }
+    footer { background: var(--dark); color: #666; text-align: center; padding: 32px; margin-top: 80px; font-size: 13px; }
+    footer span { color: var(--accent); }
+    {% block extra_styles %}{% endblock %}
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/" class="nav-logo">Tutor<span>DAO</span></a>
+    <div class="nav-links">
+      <a href="/tutors">Find Tutors</a>
+      <a href="/dashboard">Dashboard</a>
+      <a href="/register-tutor" class="btn-nav">Become a Tutor</a>
+    </div>
+  </nav>
+  {% block content %}{% endblock %}
+  <footer>Built with ❤️ by a teenager · <span>TutorDAO</span> © 2025</footer>
+</body>
+</html>

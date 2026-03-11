@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Booking Confirmed — TutorDAO{% endblock %}
+{% block content %}
+<div style="text-align:center;padding:100px 24px;">
+  <div style="font-size:72px;margin-bottom:24px;">🎉</div>
+  <h1 style="font-family:'Syne',sans-serif;font-size:40px;font-weight:800;margin-bottom:12px;">You're booked!</h1>
+  <p style="color:var(--muted);font-size:18px;margin-bottom:36px;">{{ tutor_name }} will be in touch to confirm your session.</p>
+  <a href="/tutors" class="btn btn-primary">Find More Tutors</a>
+  &nbsp;
+  <a href="/" class="btn btn-outline">Back Home</a>
+</div>
+{% endblock %}
